@@ -6,7 +6,7 @@
   	by
   		Jim Breslin
   		Kyrie Keels
-		Casey 
+		Casey Wright
   
 
   		This code is in the public domain.
