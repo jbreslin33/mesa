@@ -1,31 +1,98 @@
-/*
-  mesa
+
+int calibrationTime = 30;        
+
+//the time when the sensor outputs a low impulse
+long unsigned int lowIn;         
+
+//the amount of milliseconds the sensor has to be low 
+//before we assume all motion has stopped
+long unsigned int pause = 5000;  
+
+boolean lockLow = true;
+boolean takeLowTime;  
+
+int pirPin = 2;    //the digital pin connected to the PIR sensor's output
+int ledPin = 13;
+int count = 0;
+int valA = 0;
+int pirStateA = LOW;
+
+/////////////////////////////
+//SETUP
+void setup(){
+  Serial.begin(9600);
+  pinMode(pirPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(pirPin, LOW);
+
+  //give the sensor some time to calibrate
+  Serial.print("calibrating sensor ");
+    for(int i = 0; i < calibrationTime; i++){
+      Serial.print(".");
+      delay(1000);
+      }
+    Serial.println(" done");
+    Serial.println("SENSOR ACTIVE");
+    delay(50);
+  }
+
+////////////////////////////
+//LOOP
+void loop(){
+
+     if(digitalRead(pirPin) == HIGH){
+       digitalWrite(ledPin, HIGH);   //the led visualizes the sensors output pin state
+       if(lockLow){  
+         //makes sure we wait for a transition to LOW before any further output is made:
+         lockLow = false;            
+         Serial.println("---");
+         Serial.print("motion detected at ");
+         Serial.print(millis()/1000);
+         Serial.println(" sec"); 
+         delay(50);
  
-	detects humans coming in and out of a portal
+         }         
+         takeLowTime = true;
+       }
+       {
 
-  	by
-  		Jim Breslin
-  		Kyrie Keels
-		Casey Wright
-		Sadir Douglass
-		Jordan
-  
+   valA = digitalRead(pirPin); 
+  if (valA == HIGH) {         
+    if (pirPin == LOW) {
+       Serial.println("Someone Has Entered");
+       count ++;
+       Serial.println("Number of people:");
+      Serial.println(count);
+    
+      pirPin = HIGH;
+    }
+  } 
 
-  		This code is in the public domain.
+   else {
+    if (pirPin == HIGH){
+      Serial.println(" A Sensor ended!");
+      pirPin = LOW; 
+    }
 
-  https://github.com/jbreslin33/mesa
-*/
+     if(digitalRead(pirPin) == LOW){       
+       digitalWrite(ledPin, LOW);  //the led visualizes the sensors output pin state
 
-// the setup function runs once when you press reset or power the board
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
-}
-
-// the loop function runs over and over again forever
-void loop() {
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(5000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+       if(takeLowTime){
+        lowIn = millis();          //save the time of the transition from high to LOW
+        takeLowTime = false;       //make sure this is only done at the start of a LOW phase
+        }
+       //if the sensor is low for more than the given pause, 
+       //we assume that no more motion is going to happen
+       if(!lockLow && millis() - lowIn > pause){  
+           //makes sure this block of code is only executed again after 
+           //a new motion sequence has been detected
+           lockLow = true;                        
+           Serial.print("motion ended at ");      //output
+           Serial.print((millis() - pause)/1000);
+           Serial.println(" sec");
+           delay(50);
+       }
+     }
+   }
+       }
 }
