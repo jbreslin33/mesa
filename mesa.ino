@@ -19,13 +19,14 @@ int pirStateA = LOW;
 
 /////////////////////////////
 //SETUP
-void setup(){
-  Serial.begin(9600);
-  pinMode(pirPin, INPUT);
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(pirPin, LOW);
+void setup()
+{
+	Serial.begin(9600);
+  	pinMode(pirPin, INPUT);
+  	pinMode(ledPin, OUTPUT);
+  	digitalWrite(pirPin, LOW);
 
-  //give the sensor some time to calibrate
+  	//give the sensor some time to calibrate
   Serial.print("calibrating sensor ");
     for(int i = 0; i < calibrationTime; i++){
       Serial.print(".");
@@ -79,6 +80,7 @@ void loop(){
 
        if(takeLowTime){
         lowIn = millis();          //save the time of the transition from high to LOW
+	Serial.println(lowIn);
         takeLowTime = false;       //make sure this is only done at the start of a LOW phase
         }
        //if the sensor is low for more than the given pause, 
