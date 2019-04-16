@@ -8,6 +8,8 @@ void setup()
 	pinMode(led, OUTPUT);      // initalize LED as an output
   	pinMode(sensor, INPUT);    // initialize sensor as an input
   	Serial.begin(9600);        // initialize serial
+
+	Serial.println("Begin loop");	
 }
 
 void loop()
