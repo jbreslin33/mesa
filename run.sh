@@ -1,3 +1,3 @@
-arduino --verify mesa.ino
-arduino --upload mesa.ino
+arduino --verify infrared.ino
+arduino --upload infrared.ino
 tail -f /dev/ttyACM0
