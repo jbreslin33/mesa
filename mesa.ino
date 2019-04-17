@@ -18,9 +18,19 @@ void setup()
 void loop()
 {
 	
-	Serial.println(millis());
+	//Serial.println(millis());
 	//counter++;
-	//val = digitalRead(sensor);   // read sensor value
+	val = digitalRead(sensor);   // read sensor value
+	if (val == HIGH)
+	{
+      		digitalWrite(led, HIGH); // turn LED ON
+	}
+	else
+	{
+      		digitalWrite(led, LOW); // turn LED OFF
+	}
+    	delay(100);                // delay 100 milliseconds 
+
 		
 /*
   	if (val == HIGH) 
