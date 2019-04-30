@@ -2,8 +2,6 @@ int led = 13;                // the pin that the LED is atteched to
 int sensor = 2;              // the pin that the sensor is atteched to
 int state = LOW;             // by default, no motion detected
 int val = 0;                 // variable to store the sensor status (value)
-int counter = 0;
-int total_to_go_to = 10000;
 
 void setup() 
 {
@@ -12,14 +10,11 @@ void setup()
   	Serial.begin(9600);        // initialize serial
 
 	Serial.println("Begin loop");	
-	
 }
 
 void loop()
 {
-	
-	//Serial.println(millis());
-	//counter++;
+  	//pinMode(sensor, INPUT);    // initialize sensor as an input
 	val = digitalRead(sensor);   // read sensor value
 	if (val == HIGH)
 	{
